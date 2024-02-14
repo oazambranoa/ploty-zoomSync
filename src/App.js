@@ -4,29 +4,30 @@ import Plot from 'react-plotly.js';
 const App = () => {
     const [layout, setLayout] = useState({
         autosize: true,
-        title: 'A Fancy Plot',
-        xaxis: { range: [1, 3] },
-        yaxis: { range: [2, 6] },
+        xaxis: { autorange: true },
+        yaxis: { autorange: true },
+        title: "FBE",
     });
 
     const handleRelayout = (eventData) => {
+        const newYaxisRange = eventData['yaxis.range'] ? [0, eventData['yaxis.range'][1]] : layout.yaxis.range;
         setLayout({
             ...layout,
-            'xaxis.range': eventData['xaxis.range'],
-            'yaxis.range': eventData['yaxis.range'],
+            'xaxis.range': eventData['xaxis.range'] || layout.xaxis.range,
+            'yaxis.range': newYaxisRange,
         });
     };
 
     return (
         <div>
             <Plot
-                data={[{ x: [1, 2, 3], y: [2, 6, 3], type: 'scatter', mode: 'lines+markers', marker: { color: 'red' } }]}
+                data={[{ z: [[1, 20, 30], [20, 1, 60], [30, 60, 1]], type: 'heatmap' }]}
                 layout={layout}
                 onRelayout={handleRelayout}
             />
             <Plot
-                data={[{ x: [1, 2, 3], y: [2, 3, 5], type: 'scatter', mode: 'lines+markers', marker: { color: 'blue' } }]}
-                layout={layout}
+                data={[{ z: [[1, 2, 3, 6, 7], [2, 3, 5, 5, 7], [3, 4, 5, 6, 7]], type: 'heatmap' }]}
+                layout={{...layout, title: "FFT"}}
                 onRelayout={handleRelayout}
             />
         </div>
